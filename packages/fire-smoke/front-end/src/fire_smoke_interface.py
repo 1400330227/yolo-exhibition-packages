@@ -149,7 +149,7 @@ class FireSmokeInterface(ScrollArea):
         confidence_threshold_label.setFont(font_h4)
         cardWidget2_hbox1.addWidget(confidence_threshold_label)
         cardWidget2_hbox1.addStretch(1)
-        self.confidence_threshold_value_label = SubtitleLabel('30%')
+        self.confidence_threshold_value_label = SubtitleLabel('20%')
         cardWidget2_hbox1.addWidget(self.confidence_threshold_value_label)
 
         slider1_value_min = QLabel('0%')
@@ -158,7 +158,7 @@ class FireSmokeInterface(ScrollArea):
 
         # 设置取值范围和当前值
         self.slider1.setRange(0, 100)
-        self.slider1.setValue(30)
+        self.slider1.setValue(20)
         self.slider1.valueChanged.connect(lambda x: self.change_val(x, 'conf'))
         cardWidget2_hbox2.addWidget(slider1_value_min)
         cardWidget2_hbox2.addWidget(self.slider1)

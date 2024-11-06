@@ -4,13 +4,14 @@ import cv2
 from IPython.external.qt_for_kernel import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QPixmap, QColor
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog, QListWidget, QWidget
+from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFileDialog, QListWidget, QWidget, \
+    QSizePolicy
 from qfluentwidgets import CardWidget, BodyLabel, DisplayLabel, TitleLabel, StrongBodyLabel, ComboBox, SubtitleLabel, \
     Slider, PrimaryPushButton, FluentIcon, CheckBox, SingleDirectionScrollArea, ScrollArea, PushButton, SimpleCardWidget
 from datasets import load_wights
 from setting import names
 from utils.ui import removeAllWidgetFromLayout
-from wrapper_interface import WrapperInterface
+from i18n.zh_CN import i18n
 
 
 class FireSmokeInterface(ScrollArea):
@@ -54,14 +55,14 @@ class FireSmokeInterface(ScrollArea):
         hbox_weight.addStretch(1)
 
         # 添加图片检测按钮
-        self.image_detect_button = PushButton("💾图片检测")
+        self.image_detect_button = PushButton("💾上传图片检测")
         self.image_detect_button.clicked.connect(self.handler_open_image)
         self.image_detect_button.setEnabled(False)
         # self.image_detect_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.image_detect_button)
 
         # 添加视频检测按钮
-        self.video_detect_button = PushButton("🎬视频检测")
+        self.video_detect_button = PushButton("🎬上传视频检测")
         self.video_detect_button.clicked.connect(self.handler_open_video)
         self.video_detect_button.setEnabled(False)
         # self.video_detect_button.setFixedSize(120, 30)
@@ -91,7 +92,7 @@ class FireSmokeInterface(ScrollArea):
         hbox_video.addWidget(cardWidget1)
         cardWidget1_vbox = QVBoxLayout(cardWidget1)
         cardWidget1_hbox1 = QHBoxLayout()
-        cardWidget1_hbox2 = QHBoxLayout()
+        cardWidget1_hbox2 = QVBoxLayout()
 
         cardWidget1_vbox.addLayout(cardWidget1_hbox1)
         cardWidget1_vbox.addLayout(cardWidget1_hbox2)
@@ -106,7 +107,7 @@ class FireSmokeInterface(ScrollArea):
         cardWidget3.setMinimumSize(280, 250)  # 设置大小
         vbox_right1_layout.addWidget(cardWidget2)
         vbox_right1_layout.addWidget(cardWidget3)
-        vbox_right1_layout.setStretchFactor(cardWidget2, 1)
+        vbox_right1_layout.setStretchFactor(cardWidget2, 2)
         vbox_right1_layout.setStretchFactor(cardWidget3, 1)
 
         cardWidget2_vbox = QVBoxLayout(cardWidget2)
@@ -143,7 +144,7 @@ class FireSmokeInterface(ScrollArea):
         cardWidget2_vbox.addLayout(cardWidget2_hbox5)
         cardWidget2_vbox.addWidget(scrollArea)
 
-        confidence_threshold_label = QLabel('置信阈值：')
+        confidence_threshold_label = QLabel('检测结果可信值：')
         confidence_threshold_label.setFixedHeight(20)
         confidence_threshold_label.setFont(font_h4)
         cardWidget2_hbox1.addWidget(confidence_threshold_label)
@@ -208,7 +209,9 @@ class FireSmokeInterface(ScrollArea):
         self.result_label.setAlignment(Qt.AlignCenter)
         self.result_label.setMinimumSize(580, 450)  # 设置大小
         self.result_label.setStyleSheet('border:3px solid #009faa;')  # 添加边框并设置背景颜色为黑色
-        cardWidget1_hbox2.addWidget(self.result_label)  # 右侧显示检测后的图像
+        self.result_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+
+        cardWidget1_hbox2.addWidget(self.result_label, 1)  # 右侧显示检测后的图像
 
         action_buttons = QHBoxLayout()
         action_buttons.setAlignment(Qt.AlignRight)
@@ -218,13 +221,19 @@ class FireSmokeInterface(ScrollArea):
         self.detect_button.setFixedSize(120, 30)
         action_buttons.addWidget(self.detect_button)
 
+        self.jump_out_button = PushButton(FluentIcon.PAUSE, '停止')
+        self.jump_out_button.clicked.connect(self.handler_jump_out)
+        self.jump_out_button.setFixedSize(120, 30)
+
+        action_buttons.addWidget(self.jump_out_button)
+
         cardWidget1_vbox.addLayout(action_buttons)
 
         cardWidget3_vbox = QVBoxLayout(cardWidget3)
         cardWidget3_vbox.setAlignment(Qt.AlignTop)
 
         result_details_label = QLabel()
-        result_details_label.setText('详情信息')
+        result_details_label.setText('详细信息')
         result_details_label.setFixedHeight(20)
         result_details_label.setFont(font_h4)
         cardWidget3_vbox.addWidget(result_details_label)
@@ -278,7 +287,7 @@ class FireSmokeInterface(ScrollArea):
         for k, v in all_classes.items():
             if k > 5:
                 continue
-            checkbox = CheckBox(str(v))
+            checkbox = CheckBox(i18n(str(v)))
             checkbox.setTristate(True)
             checkbox.setFixedHeight(20)
             checkbox.resize(200, 20)
@@ -289,6 +298,9 @@ class FireSmokeInterface(ScrollArea):
 
     @staticmethod
     def show_image(img_src, label):
+        if img_src.size == 0:
+            label.clear()
+            return
         try:
             frame = cv2.cvtColor(img_src, cv2.COLOR_BGR2RGB)
             img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[2] * frame.shape[1],
@@ -384,8 +396,12 @@ class FireSmokeInterface(ScrollArea):
             print(self.current_results)
 
     def detect_application(self):
+        self.worker.jump_out = False
         if not self.worker.isRunning():
             self.worker.start()
+
+    def handler_jump_out(self):
+        self.worker.jump_out = True
 
     def exit_application(self):
         # 终止程序运行

@@ -1,6 +1,7 @@
 import glob
 import math
 import os
+import sys
 from pathlib import Path
 
 import cv2
@@ -151,15 +152,20 @@ class LoadDataSets:
         return self.nf  # number of files
 
 
-def load_wights():
-    current_file_path = os.path.abspath(__file__)
-    current_dir_path = os.path.dirname(current_file_path)  # src 目录
+def load_wights(model_name=''):
+    current_dir_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+    # current_file_path = os.path.abspath(__file__)
+    # current_dir_path = os.path.dirname(current_file_path)  # src 目录
     weight_dir = os.path.join(current_dir_path, 'weights')
     filenames = {file: os.path.join(weight_dir, file) for file in os.listdir(weight_dir) if
                  ((file != '') & (file.split('.')[-1].lower() in ['pt']))}
+
+    if model_name in filenames:
+        return {model_name: filenames[model_name]}
+
     return filenames
 
 
 if __name__ == '__main__':
-    filenames = load_wights()
+    filenames = load_wights('best.pt')
     print(filenames)

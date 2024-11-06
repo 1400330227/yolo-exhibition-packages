@@ -18,6 +18,7 @@ np.set_printoptions(suppress=True)
 IMG_FORMATS = ['bmp', 'dng', 'jpeg', 'jpg', 'mpo', 'png', 'tif', 'tiff', 'webp']  # include image suffixes
 VID_FORMATS = ['asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'wmv']  # include video suffixes
 
+
 class Worker(QThread):
     send_img = pyqtSignal(np.ndarray)  # 检测结果图像
     send_raw = pyqtSignal(np.ndarray)  # 检测源图像
@@ -35,7 +36,7 @@ class Worker(QThread):
         self.iou = None
         self.classes = None
 
-        self.jump_out = False
+        self.jump_out = False  # 停止运行
         self.is_continue = True
 
     def run(self):
@@ -112,6 +113,9 @@ class Worker(QThread):
         average_fps = 0.0
         try:
             while True:
+                if self.jump_out:
+                    break
+
                 success, frame = cap.read()
                 print('视频帧获取是否成功：{}'.format(success))
                 if success:
@@ -135,7 +139,9 @@ class Worker(QThread):
                     classes = Statistics.statistics_classes(results, names)
                     annotation_frame = results[0].plot(font_size=10)
 
-                    self.send_img.emit(annotation_frame if isinstance(annotation_frame, np.ndarray) else annotation_frame[0])
+                    self.send_img.emit(
+                        annotation_frame if isinstance(annotation_frame, np.ndarray) else annotation_frame[0])
+                    # self.send_img.emit(frame if isinstance(frame, np.ndarray) else frame[0])
                     self.send_statistic.emit(classes)
 
                     if cv2.waitKey(1) & 0xFF == ord("q"):

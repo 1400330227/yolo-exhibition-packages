@@ -14,13 +14,13 @@ from utils.ui import removeAllWidgetFromLayout
 from i18n.zh_CN import i18n
 
 
-class SteelPlateInterface(ScrollArea):
-    detect_target_label = '检测钢材表面是否出现龟裂|划痕|杂质|轧制氧化层|点蚀|斑块缺陷'
+class HelmetInterface(ScrollArea):
+    detect_target_label = '检测人物是否佩戴头盔'
 
     def __init__(self, text: str, parent=None, worker=None):
         super().__init__(parent=parent)
         # self.label = SubtitleLabel(text, self)
-        self.setObjectName('steel_plate_detect')
+        self.setObjectName('helmet_detect')
         self.worker = worker
         self.weight_paths = load_wights()
         self.all_classes = names
@@ -39,7 +39,7 @@ class SteelPlateInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('钢板表面缺陷检测')
+        label1 = QLabel('头盔检测')
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 
@@ -57,21 +57,21 @@ class SteelPlateInterface(ScrollArea):
         # 添加图片检测按钮
         self.image_detect_button = PushButton("💾上传图片检测")
         self.image_detect_button.clicked.connect(self.handler_open_image)
-        # self.image_detect_button.setEnabled(False)
+        self.image_detect_button.setEnabled(False)
         # self.image_detect_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.image_detect_button)
 
         # 添加视频检测按钮
         self.video_detect_button = PushButton("🎬上传视频检测")
         self.video_detect_button.clicked.connect(self.handler_open_video)
-        # self.video_detect_button.setEnabled(False)
+        self.video_detect_button.setEnabled(False)
         # self.video_detect_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.video_detect_button)
 
         # 添加显示检测物体按钮
         self.display_objects_button = PushButton("🔍显示检测物体")
         self.display_objects_button.clicked.connect(self.show_detected_objects)
-        # self.display_objects_button.setEnabled(False)
+        self.display_objects_button.setEnabled(False)
         # self.display_objects_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.display_objects_button)
 
@@ -214,7 +214,7 @@ class SteelPlateInterface(ScrollArea):
         cardWidget1_hbox2.addWidget(self.result_label, 1)  # 右侧显示检测后的图像
 
         action_buttons = QHBoxLayout()
-        action_buttons.setAlignment(Qt.AlignRight)
+        action_buttons.setAlignment(Qt.AlignCenter)
         # 添加开始检测
         self.detect_button = PrimaryPushButton(FluentIcon.PLAY_SOLID, '开始检测')
         self.detect_button.clicked.connect(self.detect_application)
@@ -300,7 +300,6 @@ class SteelPlateInterface(ScrollArea):
     def show_image(img_src, label):
         if img_src.size == 0:
             label.clear()
-            # label.setPixmap(QPixmap())
             return
         try:
             frame = cv2.cvtColor(img_src, cv2.COLOR_BGR2RGB)

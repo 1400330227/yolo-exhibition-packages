@@ -32,3 +32,9 @@ coverage
 
 datasets/
 PyQt-Fluent-Widgets/
+
+weights/
+
+build/
+/packages/fire-smoke/front-end/src/main.spec
+__pycache__

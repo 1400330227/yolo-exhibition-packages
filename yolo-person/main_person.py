@@ -8,5 +8,5 @@ if person_detection == 1 :
         video_path = './person_utils/output_video.mp4'
         output_path = './person_utils/output_sex_video.mp4'
         detect_gender_and_age(video_path, output_path)
-
+        print('kkk')
 

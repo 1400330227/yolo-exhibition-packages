@@ -9,3 +9,5 @@ if person_detection :
         output_path = './person_utils/output_sex_video.mp4'
         print("执行sex_detection.py 79行，使用默认路径")
         detect_gender_and_age(video_path, output_path)
+
+        print('kkkkk')

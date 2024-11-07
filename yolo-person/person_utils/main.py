@@ -1,17 +1,12 @@
-import os
 import cv2
 import torch
 import warnings
 import argparse
 import numpy as np
-# import onnxruntime as ort
-# from humanfriendly.terminal import output
-# from matplotlib.backends.backend_qt import MainWindow
 
 from utils.datasets import LoadStreams, LoadImages
 from utils.draw import draw_boxes
 from utils.general import check_img_size
-from utils.torch_utils import time_synchronized
 from utils.person_detect_yolov10 import Person_detect
 from deep_sort import build_tracker
 from utils.parser import get_config

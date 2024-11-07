@@ -10,4 +10,4 @@ if person_detection :
         print("执行sex_detection.py 79行，使用默认路径")
         detect_gender_and_age(video_path, output_path)
 
-        print('kkkkk')
+

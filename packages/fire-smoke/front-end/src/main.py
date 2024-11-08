@@ -42,6 +42,7 @@ class MainWindow(FluentWindow):
         self.titleBar.raise_()
         self.setWindowIcon(QIcon('logo.png'))
         self.setWindowTitle("目标检测")
+        self.stackedWidget.setStyleSheet("background-color: rgb(255, 255, 255);border: none;")
 
         # 居中布局
         desktop = QApplication.desktop().availableGeometry()

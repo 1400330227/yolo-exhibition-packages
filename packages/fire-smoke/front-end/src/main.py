@@ -13,7 +13,7 @@ from worker import Worker
 
 from steel_plate_interface import SteelPlateInterface
 from fire_smoke_interface import FireSmokeInterface
-
+from fruits_interface import FruitsInterface
 
 class MainWindow(FluentWindow):
     def __init__(self, parent=None):
@@ -25,6 +25,7 @@ class MainWindow(FluentWindow):
         # self.layout.setContentsMargins(20, 40, 20, 20)
         self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测',parent=self, worker=self.worker)
         self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测',parent=self, worker=self.worker)
+        self.fruitsInterface = FruitsInterface('水果检测',parent=self, worker=self.worker)
         # self.layout.addWidget(self.mainInterface)
         self.current_results = None
 
@@ -35,6 +36,7 @@ class MainWindow(FluentWindow):
     def init_navigation(self):
         self.addSubInterface(self.steelPlateInterface, FluentIcon.HOME, '钢材表面缺陷检测')
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰烟雾陷检测')
+        self.addSubInterface(self.fruitsInterface, FluentIcon.FLAG, '水果检测')
 
     def init_window(self):
         self.navigationInterface.setExpandWidth(250)

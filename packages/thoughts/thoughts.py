@@ -39,5 +39,4 @@ def do_request(inputs):
     chat_comp = qianfan.ChatCompletion()
     prompt = create_message(inputs)
     resp = chat_comp.do(model="ERNIE-4.0-8K", messages=[{"role": "user", "content": prompt}])
-    # 返回resp["body"]["result"]
     return resp["body"]["result"]

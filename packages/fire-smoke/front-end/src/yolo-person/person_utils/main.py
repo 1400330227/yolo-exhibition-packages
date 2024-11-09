@@ -87,7 +87,8 @@ def compute_color_for_labels(class_id,class_total=80):
     return (int(red*256),int(green*256),int(blue*256))
 
 class yolo_reid():
-    def __init__(self, cfg, args, path):
+
+    def __init__(self, cfg, args, path, weights):
         self.logger = get_logger("root")
         self.args = args
         self.video_path = path
@@ -102,7 +103,8 @@ class yolo_reid():
         self.dataset = LoadImages(self.video_path, img_size=imgsz)
         self.deepsort = build_tracker(cfg, args.sort, use_cuda=use_cuda)
         '''
-        self.person_detect = Person_detect(self.args, self.video_path)
+        self.weights = weights
+        self.person_detect = Person_detect(self.args, self.weights, self.video_path)
         self.vid_cap = cv2.VideoCapture(self.video_path)
         self.width = int(self.vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -137,12 +139,13 @@ class yolo_reid():
             outputs = self.deepsort.update(bbox_xywh, cls_conf, ori_img)
 
             # 根据 choose_line 的值决定是否画黄线
-            choose_line = 0
+            choose_line = 0 # 参数 --用户选择是否画黄线 + 用户选择是否识别性别sex_detect
             if choose_line == '1' :
                 # 1.视频中间画行黄线
                 line = [(0, int(0.48 * ori_img.shape[0])), (int(ori_img.shape[1]), int(0.48 * ori_img.shape[0]))]
                 cv2.line(ori_img, line[0], line[1], (0, 255, 255), 4)
             else:
+
                 line = None
 
             # 2. 统计人数
@@ -175,23 +178,6 @@ class yolo_reid():
                         up_count += 1
                     if angle < 0:
                         down_count += 1
-                '''
-                if intersect(midpoint, previous_midpoint, line[0], line[1]) and track_id not in already_counted:
-                    class_counter[track_cls] += 1
-                    total_counter += 1
-                    last_track_id = track_id;
-                    # draw red line
-                    cv2.line(ori_img, line[0], line[1], (0, 0, 255), 10)
-
-                    already_counted.append(track_id)  # Set already counted for ID to true.
-
-                    angle = vector_angle(origin_midpoint, origin_previous_midpoint)
-
-                    if angle > 0:
-                        up_count += 1
-                    if angle < 0:
-                        down_count += 1
-                '''
                 if len(paths) > 50:
                     del paths[list(paths)[0]]
 
@@ -206,14 +192,14 @@ class yolo_reid():
                     bbox_tlwh.append(self.deepsort._xyxy_to_tlwh(bb_xyxy))
 
             # 4. 绘制统计信息
-            label = "客流总数: {}".format(str(total_track))
+            label = "客流总数: {}".format(str(total_track)) # 参数 --客流总数total_track
             t_size = get_size_with_pil(label, 25)
             x1 = 20
             y1 = 50
             color = compute_color_for_labels(2)
             cv2.rectangle(ori_img, (x1 - 1, y1), (x1 + t_size[0] + 10, y1 - t_size[1]), color, 2)
             ori_img = put_text_to_cv2_img_with_pil(ori_img, label, (x1 + 5, y1 - t_size[1] - 2), (0, 0, 0))
-
+            # 参数 total_counter up_count down_count
             label = "穿过黄线人数: {} ({} 向上, {} 向下)".format(str(total_counter), str(up_count), str(down_count))
             t_size = get_size_with_pil(label, 25)
             x1 = 20
@@ -222,7 +208,7 @@ class yolo_reid():
             cv2.rectangle(ori_img, (x1 - 1, y1), (x1 + t_size[0] + 10, y1 - t_size[1]), color, 2)
             ori_img = put_text_to_cv2_img_with_pil(ori_img, label, (x1 + 5, y1 - t_size[1] - 2), (0, 0, 0))
 
-            if last_track_id >= 0:
+            if last_track_id >= 0: # 参数 -- last_track_id
                 label = "最新: 行人{}号{}穿过黄线".format(str(last_track_id),
                                                           str("向上") if angle >= 0 else str('向下'))
                 t_size = get_size_with_pil(label, 25)
@@ -236,13 +222,13 @@ class yolo_reid():
 
             # 将处理后的帧写入视频文件
             self.out.write(ori_img)
-            '''
+
             # 实时显示输出结果
             if self.args.display:
                 cv2.imshow("test", ori_img)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-            '''
+            # 参数 bbox_xywh.shape[0]
             # 实时显示运行过程中的相关信息
             self.logger.info("{}/time: {:.03f}s, fps: {:.03f}, detection numbers: {}, tracking numbers: {}" \
                              .format(idx_frame, end - t1, 1 / (end - t1),
@@ -275,7 +261,7 @@ def parse_args():
     parser.add_argument("--camera", action="store", dest="cam", type=int, default="-1")
     parser.add_argument('--device', default='cuda:0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu') #cpu相关
     # yolov10
-    parser.add_argument('--weights', nargs='+', type=str, default='../../weights/yolov10s(1).pt', help='model.pt path(s)')
+    parser.add_argument('--weights', nargs='+', type=str, default='./models/yolov10s.pt', help='model.pt path(s)')
     parser.add_argument('--img-size', type=int, default=960, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.4, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.5, help='IOU threshold for NMS')
@@ -293,10 +279,18 @@ def parse_args():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+#     args = parse_args()
+#     cfg = get_config()
+#     cfg.merge_from_file(args.config_deepsort)
+#     yolo_reid = yolo_reid(cfg, args, path=args.video_path)
+#     with torch.no_grad():
+#         yolo_reid.deep_sort()
+
+def main_person():
     args = parse_args()
     cfg = get_config()
     cfg.merge_from_file(args.config_deepsort)
-    yolo_reid = yolo_reid(cfg, args, path=args.video_path)
+    yolo_reid_instance = yolo_reid(cfg, args, path=args.video_path, weights='./models/yolov10s.pt')
     with torch.no_grad():
-        yolo_reid.deep_sort()
+        yolo_reid_instance.deep_sort()

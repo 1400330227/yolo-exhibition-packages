@@ -13,18 +13,19 @@ from worker import Worker
 
 from steel_plate_interface import SteelPlateInterface
 from fire_smoke_interface import FireSmokeInterface
+from person_worker import PersonWorker
 
 
 class MainWindow(FluentWindow):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.worker = Worker()
-
+        self.worker1 = PersonWorker()
 
         # self.layout = QVBoxLayout(self)
         # self.layout.setContentsMargins(20, 40, 20, 20)
-        self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测',parent=self, worker=self.worker)
-        self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测',parent=self, worker=self.worker)
+        self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测', parent=self, worker=self.worker)
+        self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测', parent=self, worker=self.worker)
         # self.layout.addWidget(self.mainInterface)
         self.current_results = None
 
@@ -50,7 +51,6 @@ class MainWindow(FluentWindow):
         self.resize(w, h)
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
 
-
     def handler_switch_to(self, current_widget):
         # print(current_widget)
         # print(self.worker)
@@ -61,6 +61,7 @@ class MainWindow(FluentWindow):
 
     def init_listener(self):
         self.stackedWidget.currentChanged.connect(lambda: self.handler_switch_to(self.stackedWidget.currentWidget()))
+
 
 if __name__ == '__main__':
     QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)

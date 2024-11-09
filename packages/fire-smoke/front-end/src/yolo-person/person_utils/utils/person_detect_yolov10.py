@@ -55,7 +55,7 @@ def bbox_r(width, height, *xyxy):
 
 
 class Person_detect():
-    def __init__(self, opt, source):
+    def __init__(self, opt, source, weights):
 
         # Initialize
         self.device = opt.device if torch.cuda.is_available() else 'cpu'
@@ -68,7 +68,6 @@ class Person_detect():
         self.webcam = opt.cam
         # Load model
         self.model = attempt_load(opt.weights, map_location=self.device)  # load FP32 model
-        print('111111111111111111111111111111111111111', self.model.stride.max())
         if self.half:
             self.model.half()  # to FP16
 

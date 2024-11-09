@@ -1,5 +1,5 @@
 from .deep_sort import DeepSort
-# from .deep_reid import DeepReid
+from .deep_reid import DeepReid
 
 
 __all__ = ['DeepSort', 'build_tracker', 'DeepReid']

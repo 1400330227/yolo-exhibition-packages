@@ -14,13 +14,13 @@ from utils.ui import removeAllWidgetFromLayout
 from i18n.zh_CN import i18n
 
 
-class SteelPlateInterface(ScrollArea):
-    detect_target_label = '检测钢材表面是否出现龟裂|划痕|杂质|轧制氧化层|点蚀|斑块缺陷'
+class FruitsInterface(ScrollArea):
+    detect_target_label = '检测汽车的颜色、数量'
 
     def __init__(self, text: str, parent=None, worker=None):
         super().__init__(parent=parent)
         # self.label = SubtitleLabel(text, self)
-        self.setObjectName('steel_plate_detect')
+        self.setObjectName('fruits_detect')
         self.worker = worker
         self.weight_paths = load_wights()
         self.all_classes = names
@@ -39,7 +39,7 @@ class SteelPlateInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('钢板表面缺陷检测')
+        label1 = QLabel(text)
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 
@@ -75,11 +75,11 @@ class SteelPlateInterface(ScrollArea):
         # self.display_objects_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.display_objects_button)
 
-        comboBox = ComboBox()
+        self.comboBox = ComboBox()
         items = [item for item in self.weight_paths.keys()]
-        comboBox.addItems(items)
-        comboBox.currentIndexChanged.connect(lambda index: self.load_model(index, comboBox.currentText()))
-        vbox_weight.addWidget(comboBox)
+        self.comboBox.addItems(items)
+        self.comboBox.currentIndexChanged.connect(lambda index: self.load_model(index, self.comboBox.currentText()))
+        vbox_weight.addWidget(self.comboBox)
 
         self.layout.addLayout(vbox_weight)  # 添加下拉框
 
@@ -266,6 +266,14 @@ class SteelPlateInterface(ScrollArea):
 
         self.init_widget()
         self.add_event_listener()
+        self.init_model('fruits.pt')
+
+    def init_model(self, model_path):
+        index = list(self.weight_paths.keys()).index(model_path)
+        if index != -1:
+            self.comboBox.setCurrentIndex(index)
+        # print(index, 'index')
+        # self.load_model(model_path)
 
     def add_event_listener(self):
         self.worker.send_img.connect(lambda x: self.show_image(x, self.result_label))
@@ -300,7 +308,6 @@ class SteelPlateInterface(ScrollArea):
     def show_image(img_src, label):
         if img_src.size == 0:
             label.clear()
-            # label.setPixmap(QPixmap())
             return
         try:
             frame = cv2.cvtColor(img_src, cv2.COLOR_BGR2RGB)
@@ -354,7 +361,7 @@ class SteelPlateInterface(ScrollArea):
             k = k + 1
         return check_list, k
 
-    def load_model(self, value):
+    def load_model(self, key, value):
         model_path = self.weight_paths[value]
         self.worker.set_model_path(model_path)
         self.all_classes = self.worker.get_classes()

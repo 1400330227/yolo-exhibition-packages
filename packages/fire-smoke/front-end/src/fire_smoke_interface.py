@@ -266,10 +266,10 @@ class FireSmokeInterface(ScrollArea):
 
         self.init_widget()
         self.add_event_listener()
+        self.init_model('fire_smoke.pt')
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)
-        print(index, 'index')
         if index != -1:
             self.comboBox.setCurrentIndex(index)  # 2
             self.load_model(index, model_path)
@@ -367,8 +367,8 @@ class FireSmokeInterface(ScrollArea):
         self.worker.set_model_path(model_path)
         self.all_classes = self.worker.get_classes()
         # print(self.all_classes)
-        print(model_path, 'model_pathmodel_pathmodel_path')
-        print(value, 'valuevaluevalue')
+        # print(model_path, 'model_pathmodel_pathmodel_path')
+        # print(value, 'valuevaluevalue')
 
         self.checkbox_list = self.init_checkbox_list(self.all_classes, self.cardWidget2_vbox6)
         for i, checkbox in enumerate(self.checkbox_list):

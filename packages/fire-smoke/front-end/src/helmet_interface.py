@@ -270,7 +270,6 @@ class HelmetInterface(ScrollArea):
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)
-        print(index, 'index')
         if index != -1:
             self.comboBox.setCurrentIndex(index)
             self.load_model(index, model_path)
@@ -367,8 +366,6 @@ class HelmetInterface(ScrollArea):
         model_path = self.weight_paths[value]
         self.worker.set_model_path(model_path)
         self.all_classes = self.worker.get_classes()
-        print(self.all_classes)
-        print(model_path)
 
         self.checkbox_list = self.init_checkbox_list(self.all_classes, self.cardWidget2_vbox6)
         for i, checkbox in enumerate(self.checkbox_list):

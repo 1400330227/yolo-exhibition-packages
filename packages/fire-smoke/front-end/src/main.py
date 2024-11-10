@@ -28,12 +28,13 @@ class MainWindow(FluentWindow):
 
         # self.layout = QVBoxLayout(self)
         # self.layout.setContentsMargins(20, 40, 20, 20)
-        self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测', parent=self, worker=self.worker)
+
         self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测', parent=self, worker=self.worker)
         self.personInterface = PersonInterface('人员检测', parent=self, worker=self.worker1)
         self.fruitsInterface = FruitsInterface('水果检测', parent=self, worker=self.worker)
         self.carInterface = CarInterface('车辆检测', parent=self, worker=self.worker)
         self.helmetInterface = HelmetInterface('安全帽检测', parent=self, worker=self.worker)
+        self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测', parent=self, worker=self.worker)
         # self.layout.addWidget(self.mainInterface)
         self.current_results = None
 
@@ -42,12 +43,12 @@ class MainWindow(FluentWindow):
         self.init_listener()
 
     def init_navigation(self):
-        self.addSubInterface(self.steelPlateInterface, FluentIcon.HOME, '钢材表面缺陷检测')
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰烟雾陷检测')
         self.addSubInterface(self.personInterface, FluentIcon.ROBOT, '人员检测')
         self.addSubInterface(self.fruitsInterface, FluentIcon.LIBRARY, '水果检测')
         self.addSubInterface(self.carInterface, FluentIcon.CAR, '车辆检测')
         self.addSubInterface(self.helmetInterface, FluentIcon.HEADPHONE, '安全帽检测')
+        self.addSubInterface(self.steelPlateInterface, FluentIcon.HOME, '钢材表面缺陷检测')
 
     def init_window(self):
         self.navigationInterface.setExpandWidth(250)
@@ -75,22 +76,27 @@ class MainWindow(FluentWindow):
         if isinstance(current_widget, FruitsInterface):
             self.fruitsInterface.init_model('fruits.pt')
             self.worker.source = "datasets/fruits.mp4"
+            self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, CarInterface):
             self.carInterface.init_model('car.pt')
             self.worker.source = "datasets/car.mp4"
+            self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, HelmetInterface):
             self.helmetInterface.init_model('helmet.pt')
             self.worker.source = "datasets/helmet.mp4"
+            self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, SteelPlateInterface):
             self.steelPlateInterface.init_model('steelplate.pt')
-
-            self.worker.source = "datasets/"
+            self.worker.source = "datasets/person.mp4"
+            self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, FireSmokeInterface):
             self.fireSmokeInterface.init_model('fire_smoke.pt')
-            self.worker.source = "datasets/fire_smoke.mp4"
+            self.worker.source = "datasets/fire_smoke.avi"
+            self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, PersonInterface):
             self.personInterface.init_model('person.pt')
             self.worker1.source = "datasets/person.mp4"
+            self.worker1.frame_show_1(self.worker1.source)
 
         # print(self.worker)
 

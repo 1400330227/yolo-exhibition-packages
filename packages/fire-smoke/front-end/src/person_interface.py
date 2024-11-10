@@ -39,7 +39,7 @@ class PersonInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('汽车检测')
+        label1 = QLabel('人员检测')
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 
@@ -317,8 +317,8 @@ class PersonInterface(ScrollArea):
         try:
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
-            statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
+            # statistic_dic = [i for i in statistic_dic if i[1] > 0]
+            results = [str(i[1]) for i in statistic_dic]
             label.addItems(results)
 
         except Exception as e:

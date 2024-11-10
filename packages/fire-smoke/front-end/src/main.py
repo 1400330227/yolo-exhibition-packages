@@ -16,6 +16,8 @@ from fire_smoke_interface import FireSmokeInterface
 from person_interface import PersonInterface
 from person_worker import PersonWorker
 from fruits_interface import FruitsInterface
+from car_interface import CarInterface
+from helmet_interface import HelmetInterface
 
 
 class MainWindow(FluentWindow):
@@ -30,6 +32,8 @@ class MainWindow(FluentWindow):
         self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测', parent=self, worker=self.worker)
         self.personInterface = PersonInterface('人员检测', parent=self, worker=self.worker1)
         self.fruitsInterface = FruitsInterface('水果检测', parent=self, worker=self.worker)
+        self.carInterface = CarInterface('车辆检测', parent=self, worker=self.worker)
+        self.helmetInterface = HelmetInterface('安全帽检测', parent=self, worker=self.worker)
         # self.layout.addWidget(self.mainInterface)
         self.current_results = None
 
@@ -41,7 +45,9 @@ class MainWindow(FluentWindow):
         self.addSubInterface(self.steelPlateInterface, FluentIcon.HOME, '钢材表面缺陷检测')
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰烟雾陷检测')
         self.addSubInterface(self.personInterface, FluentIcon.ROBOT, '人员检测')
-        self.addSubInterface(self.fruitsInterface, FluentIcon.ROBOT, '水果检测')
+        self.addSubInterface(self.fruitsInterface, FluentIcon.LIBRARY, '水果检测')
+        self.addSubInterface(self.carInterface, FluentIcon.CAR, '车辆检测')
+        self.addSubInterface(self.helmetInterface, FluentIcon.HEADPHONE, '安全帽检测')
 
     def init_window(self):
         self.navigationInterface.setExpandWidth(250)
@@ -57,13 +63,35 @@ class MainWindow(FluentWindow):
         self.resize(w, h)
         self.move(w // 2 - self.width() // 2, h // 2 - self.height() // 2)
 
+        # 这行代码必须在 setExpandWidth() 后面调用
+        self.navigationInterface.setCollapsible(False)
+
     def handler_switch_to(self, current_widget):
-        # print(current_widget)
-        # print(self.worker)
         self.worker.jump_out = True
-        self.worker.source = None
         self.worker.send_img.emit(np.array([]))  # 检测结果图像
         self.worker.send_statistic.emit({})
+
+        if isinstance(current_widget, FruitsInterface):
+            self.fruitsInterface.init_model('fruits.pt')
+            self.worker.source = "datasets/fruits.mp4"
+        elif isinstance(current_widget, CarInterface):
+            self.carInterface.init_model('car.pt')
+            self.worker.source = "datasets/car.mp4"
+        elif isinstance(current_widget, HelmetInterface):
+            self.helmetInterface.init_model('helmet.pt')
+            self.worker.source = "datasets/helmet.mp4"
+        elif isinstance(current_widget, SteelPlateInterface):
+            self.steelPlateInterface.init_model('steelplate.pt')
+
+            self.worker.source = "datasets/"
+        elif isinstance(current_widget, FireSmokeInterface):
+            self.fireSmokeInterface.init_model('fire_smoke.pt')
+            self.worker.source = "datasets/fire_smoke.mp4"
+        elif isinstance(current_widget, PersonInterface):
+            self.personInterface.init_model('person.pt')
+            self.worker1.source = "datasets/person.mp4"
+
+        # print(self.worker)
 
     def init_listener(self):
         self.stackedWidget.currentChanged.connect(lambda: self.handler_switch_to(self.stackedWidget.currentWidget()))

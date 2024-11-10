@@ -129,7 +129,7 @@ class Worker(QThread):
 
                     end = time.time()
                     video_frame = video_frame + 1
-                    video_fps = 1.0 / (end - start)
+                    video_fps = 1.0 / ((end - start) + 0.001)
                     average_fps += video_fps
 
                     print('当前帧：{}'.format(video_frame))

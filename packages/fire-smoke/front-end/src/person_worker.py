@@ -148,10 +148,11 @@ class PersonWorker(QThread):
                     # 判断是否检测性别或者向上向下
                     isline = False
                     issex = False
-                    if 0 in self.classes:
-                        isline = True
-                    if 1 in self.classes:
-                        issex = True
+                    if self.classes is not None:
+                        if 0 in self.classes:
+                            isline = True
+                        if 1 in self.classes:
+                            issex = True
                     # 将图像，识别结果传入处理函数，获取到画框后的图像以及统计信息
                     img, classes = detector.get_data(img_tensor, frame, [pred], isline=isline, issex=issex)
 
@@ -164,8 +165,8 @@ class PersonWorker(QThread):
                     print("平均帧率: %.1f" % (average_fps / video_frame))
 
                     # 休眠一段时间，以控制帧率
-                    if video_fps > fps:
-                        time.sleep((1 / fps - (end - start)) / 2)
+                    # if video_fps > fps:
+                    #     time.sleep((1 / fps - (end - start)) / 3)
                     # Boxes.draw_boxes(frame, results)
                     # classes = Statistics.statistics_classes(results, names)
                     # annotation_frame = results[0].plot(font_size=10)

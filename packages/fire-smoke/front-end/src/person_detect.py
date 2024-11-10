@@ -316,5 +316,8 @@ class PersonDetect():
                 "total": total_label,
                 "num_now": f"当前画面人数：{bbox_xywh.shape[0]}",
             }
-        ori_img = detect_gender_and_age(ori_img)
+        if issex:
+            ori_img = detect_gender_and_age(ori_img)
+        else:
+            print("未选择性别")
         return ori_img, info

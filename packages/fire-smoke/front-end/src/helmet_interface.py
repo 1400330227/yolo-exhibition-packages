@@ -75,11 +75,11 @@ class HelmetInterface(ScrollArea):
         # self.display_objects_button.setFixedSize(120, 30)
         hbox_weight.addWidget(self.display_objects_button)
 
-        comboBox = ComboBox()
+        self.comboBox = ComboBox()
         items = [item for item in self.weight_paths.keys()]
-        comboBox.addItems(items)
-        comboBox.currentIndexChanged.connect(lambda index: self.load_model(index, comboBox.currentText()))
-        vbox_weight.addWidget(comboBox)
+        self.comboBox.addItems(items)
+        self.comboBox.currentIndexChanged.connect(lambda index: self.load_model(index, self.comboBox.currentText()))
+        vbox_weight.addWidget(self.comboBox)
 
         self.layout.addLayout(vbox_weight)  # 添加下拉框
 
@@ -266,6 +266,12 @@ class HelmetInterface(ScrollArea):
 
         self.init_widget()
         self.add_event_listener()
+        self.init_model('helmet.pt')
+
+    def init_model(self, model_path):
+        index = list(self.weight_paths.keys()).index(model_path)
+        if index != -1:
+            self.comboBox.setCurrentIndex(index)
 
     def add_event_listener(self):
         self.worker.send_img.connect(lambda x: self.show_image(x, self.result_label))
@@ -354,6 +360,8 @@ class HelmetInterface(ScrollArea):
         return check_list, k
 
     def load_model(self, key, value):
+        if key == -1:
+            return
         model_path = self.weight_paths[value]
         self.worker.set_model_path(model_path)
         self.all_classes = self.worker.get_classes()

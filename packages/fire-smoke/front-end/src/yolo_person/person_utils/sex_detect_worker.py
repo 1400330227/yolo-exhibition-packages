@@ -38,18 +38,17 @@ ageNet = cv2.dnn.readNet(ageModel, ageProto)
 genderNet = cv2.dnn.readNet(genderModel, genderProto)
 
 
-def detect_gender_and_age(img):
-    resultImg = img.copy()
+def detect_gender_and_age(img_np):
     padding = 20
-    resultImg, faceBoxes = highlightFace(faceNet, resultImg)
+    resultImg, faceBoxes = highlightFace(faceNet, img_np)
     if not faceBoxes:
         print("No face detected")
     else:
         for faceBox in faceBoxes:
-            face = resultImg[max(0, faceBox[1] - padding):
-                             min(faceBox[3] + padding, resultImg.shape[0] - 1), max(0, faceBox[0] - padding):
-                                                                                min(faceBox[2] + padding,
-                                                                                    resultImg.shape[1] - 1)]
+            face = img_np[max(0, faceBox[1] - padding):
+                          min(faceBox[3] + padding, img_np.shape[0] - 1), max(0, faceBox[0] - padding):
+                                                                          min(faceBox[2] + padding,
+                                                                              img_np.shape[1] - 1)]
             blob = cv2.dnn.blobFromImage(face, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
             genderNet.setInput(blob)
             genderPreds = genderNet.forward()
@@ -59,15 +58,8 @@ def detect_gender_and_age(img):
             agePreds = ageNet.forward()
             age = ageList[agePreds[0].argmax()]
             print(f'Age: {age[1:-1]} years')
-            text = f'{gender}, {age}'
-            # 增大字体大小
-            font_scale = 5
-            thickness = 8
-            (text_width, text_height), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)
-            cv2.rectangle(resultImg, (faceBox[0], faceBox[1] - text_height - 10),
-                          (faceBox[0] + text_width, faceBox[1] - 10), (0, 255, 255), -1)
-            cv2.putText(resultImg, text, (faceBox[0], faceBox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 0),
-                        thickness, cv2.LINE_AA)
+            cv2.putText(resultImg, f'{gender}, {age}', (faceBox[0], faceBox[1] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
+                        (0, 255, 255), 2, cv2.LINE_AA)
     return resultImg
 
 #

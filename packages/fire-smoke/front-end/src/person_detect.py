@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import torch
 from PIL import ImageFont, Image, ImageDraw
-from yolo_person.person_utils.sex_detection_worker import detect_gender_and_age
+from yolo_person.person_utils.sex_detect_worker import detect_gender_and_age
 from utils.deep_sort import build_tracker, DeepSort
 
 
@@ -316,5 +316,5 @@ class PersonDetect():
                 "total": total_label,
                 "num_now": f"当前画面人数：{bbox_xywh.shape[0]}",
             }
-        777777777777777777
+        ori_img = detect_gender_and_age(ori_img)
         return ori_img, info

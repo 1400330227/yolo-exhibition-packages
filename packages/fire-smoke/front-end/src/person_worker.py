@@ -167,7 +167,7 @@ class PersonWorker(QThread):
 
                     # 休眠一段时间，以控制帧率
                     # if video_fps > fps:
-                    #     time.sleep((1 / fps - (end - start)) / 3)
+                    #     time.sleep((1 / fps - (end - start)))
                     # Boxes.draw_boxes(frame, results)
                     # classes = Statistics.statistics_classes(results, names)
                     # annotation_frame = results[0].plot(font_size=10)

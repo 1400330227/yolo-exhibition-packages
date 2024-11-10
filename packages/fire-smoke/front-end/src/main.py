@@ -75,7 +75,7 @@ class MainWindow(FluentWindow):
 
         if isinstance(current_widget, FruitsInterface):
             self.fruitsInterface.init_model('fruits.pt')
-            self.worker.source = "datasets/fruits.mp4"
+            self.worker.source = "datasets/watermelon.mp4"
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, CarInterface):
             self.carInterface.init_model('car.pt')

@@ -143,7 +143,9 @@ class Worker(QThread):
                         annotation_frame if isinstance(annotation_frame, np.ndarray) else annotation_frame[0])
                     # self.send_img.emit(frame if isinstance(frame, np.ndarray) else frame[0])
                     self.send_statistic.emit(classes)
-
+                    # 休眠一段时间，以控制帧率
+                    if video_fps > fps:
+                        time.sleep(1 / fps - (end - start))
                     if cv2.waitKey(1) & 0xFF == ord("q"):
                         break
                 else:

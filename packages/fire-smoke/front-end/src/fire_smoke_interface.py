@@ -214,7 +214,7 @@ class FireSmokeInterface(ScrollArea):
         cardWidget1_hbox2.addWidget(self.result_label, 1)  # 右侧显示检测后的图像
 
         action_buttons = QHBoxLayout()
-        action_buttons.setAlignment(Qt.AlignRight)
+        action_buttons.setAlignment(Qt.AlignCenter)
         # 添加开始检测
         self.detect_button = PrimaryPushButton(FluentIcon.PLAY_SOLID, '开始检测')
         self.detect_button.clicked.connect(self.detect_application)

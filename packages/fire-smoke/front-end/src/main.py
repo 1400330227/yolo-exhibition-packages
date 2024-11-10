@@ -13,6 +13,7 @@ from worker import Worker
 
 from steel_plate_interface import SteelPlateInterface
 from fire_smoke_interface import FireSmokeInterface
+from person_interface import PersonInterface
 from person_worker import PersonWorker
 
 
@@ -26,6 +27,7 @@ class MainWindow(FluentWindow):
         # self.layout.setContentsMargins(20, 40, 20, 20)
         self.steelPlateInterface = SteelPlateInterface('钢材表面缺陷检测', parent=self, worker=self.worker)
         self.fireSmokeInterface = FireSmokeInterface('火焰烟雾陷检测', parent=self, worker=self.worker)
+        self.personInterface = PersonInterface('人员检测', parent=self, worker=self.worker1)
         # self.layout.addWidget(self.mainInterface)
         self.current_results = None
 
@@ -36,6 +38,7 @@ class MainWindow(FluentWindow):
     def init_navigation(self):
         self.addSubInterface(self.steelPlateInterface, FluentIcon.HOME, '钢材表面缺陷检测')
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰烟雾陷检测')
+        self.addSubInterface(self.personInterface, FluentIcon.ROBOT, '人员检测')
 
     def init_window(self):
         self.navigationInterface.setExpandWidth(250)

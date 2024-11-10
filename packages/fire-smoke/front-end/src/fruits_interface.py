@@ -273,6 +273,7 @@ class FruitsInterface(ScrollArea):
         print(index, 'index')
         if index != -1:
             self.comboBox.setCurrentIndex(index)
+            self.load_model(index, model_path)
 
         # print(index, 'index')
         # self.load_model(model_path)
@@ -363,7 +364,7 @@ class FruitsInterface(ScrollArea):
             k = k + 1
         return check_list, k
 
-    def load_model(self, key='', value=-1):
+    def load_model(self, key=-1, value=''):
         if key == -1:
             return
         model_path = self.weight_paths[value]

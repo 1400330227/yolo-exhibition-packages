@@ -270,8 +270,10 @@ class HelmetInterface(ScrollArea):
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)
+        print(index, 'index')
         if index != -1:
             self.comboBox.setCurrentIndex(index)
+            self.load_model(index, model_path)
 
     def add_event_listener(self):
         self.worker.send_img.connect(lambda x: self.show_image(x, self.result_label))

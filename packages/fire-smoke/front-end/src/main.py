@@ -70,6 +70,7 @@ class MainWindow(FluentWindow):
         self.worker.jump_out = True
         self.worker.send_img.emit(np.array([]))  # 检测结果图像
         self.worker.send_statistic.emit({})
+        self.worker.classes = None
 
         if isinstance(current_widget, FruitsInterface):
             self.fruitsInterface.init_model('fruits.pt')

@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import torch
 from PIL import ImageFont, Image, ImageDraw
-# from yolo_person.person_utils.sex_detection
+from yolo_person.person_utils.sex_detection_worker import detect_gender_and_age
 from utils.deep_sort import build_tracker, DeepSort
 
 

@@ -318,6 +318,6 @@ class PersonDetect():
             }
         if issex:
             ori_img = detect_gender_and_age(ori_img)
-        else:
-            print("未选择性别")
+        # else:
+        # print("未选择性别")
         return ori_img, info

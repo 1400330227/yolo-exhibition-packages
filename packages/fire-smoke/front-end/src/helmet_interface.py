@@ -380,6 +380,7 @@ class HelmetInterface(ScrollArea):
         if not image_path:
             print('沒有找到文件')
         self.worker.set_source(image_path)
+        self.worker.frame_show_1(image_path)
         log = '您已经打开文件：' + image_path
         self.set_logs([log])
 
@@ -395,6 +396,7 @@ class HelmetInterface(ScrollArea):
         if not video_path:
             print('沒有找到文件')
         self.worker.set_source(video_path)
+        self.worker.frame_show_1(video_path)
         log = '您已经打开文件：' + video_path
         self.set_logs([log])
 

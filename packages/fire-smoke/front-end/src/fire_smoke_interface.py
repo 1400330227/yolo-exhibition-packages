@@ -267,6 +267,8 @@ class FireSmokeInterface(ScrollArea):
         self.init_widget()
         self.add_event_listener()
         self.init_model('fire_smoke.pt')
+        self.worker.source = "datasets/fire_smoke.avi"
+        self.worker.frame_show_1(self.worker.source)
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)
@@ -383,6 +385,7 @@ class FireSmokeInterface(ScrollArea):
         if not image_path:
             print('沒有找到文件')
         self.worker.set_source(image_path)
+        self.worker.frame_show_1(image_path)
         log = '您已经打开文件：' + image_path
         self.set_logs([log])
 
@@ -398,6 +401,7 @@ class FireSmokeInterface(ScrollArea):
         if not video_path:
             print('沒有找到文件')
         self.worker.set_source(video_path)
+        self.worker.frame_show_1(video_path)
         log = '您已经打开文件：' + video_path
         self.set_logs([log])
 

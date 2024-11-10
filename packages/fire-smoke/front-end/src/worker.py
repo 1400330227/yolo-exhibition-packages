@@ -164,11 +164,11 @@ class Worker(QThread):
         self.classes = classes if len(classes) > 0 else None
 
     def frame_show_1(self, video_path):
-        print(video_path)
+        # print(video_path)
         cap = cv2.VideoCapture(video_path)
         success, frame = cap.read()
         if success:
-            print('视频第一帧获取成功：{}')
+            # print('视频第一帧获取成功：{}')
             self.send_img.emit(frame if isinstance(frame, np.ndarray) else frame[0])
         cap.release()
         return True

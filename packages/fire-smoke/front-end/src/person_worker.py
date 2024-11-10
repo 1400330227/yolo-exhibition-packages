@@ -96,6 +96,7 @@ class PersonWorker(QThread):
             pred = results[0].boxes.data
 
             img, classes = detector.get_data(img_tensor, images, [pred])
+            results = model(images, conf=conf, iou=iou, classes=[0], verbose=False)
             self.send_img.emit(results[0].plot())
             self.send_statistic.emit(classes)
         except Exception as e:

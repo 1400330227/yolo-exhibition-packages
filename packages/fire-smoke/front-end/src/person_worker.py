@@ -186,6 +186,8 @@ class PersonWorker(QThread):
             cv2.destroyAllWindows()
         except Exception as e:
             print(e)
+        finally:
+            del detector
 
     def set_source(self, source):
         self.source = source

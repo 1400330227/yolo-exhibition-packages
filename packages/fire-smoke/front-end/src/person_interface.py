@@ -39,7 +39,7 @@ class PersonInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('人员检测')
+        label1 = QLabel('行人检测')
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 

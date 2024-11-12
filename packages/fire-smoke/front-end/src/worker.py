@@ -3,6 +3,7 @@ import time
 import cv2
 import numpy as np
 import torch
+from PIL.ImageSequence import all_frames
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QImage
 from ultralytics import YOLO
@@ -109,12 +110,17 @@ class Worker(QThread):
         model = self.init_model(self.model_path)
         names = model.module.names if hasattr(model, 'module') else model.names  # 分类信息
 
+        len_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         video_frame = 0
         average_fps = 0.0
         try:
-            while True:
+            while cap.isOpened():
                 if self.jump_out:
                     break
+
+                if video_frame == len_frames:
+                    video_frame = 0
+                    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
                 success, frame = cap.read()
                 print('视频帧获取是否成功：{}'.format(success))

@@ -266,9 +266,6 @@ class FireSmokeInterface(ScrollArea):
 
         self.init_widget()
         self.add_event_listener()
-        self.init_model('fire_smoke.pt')
-        self.worker.source = "datasets/fire_smoke.avi"
-        self.worker.frame_show_1(self.worker.source)
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)

@@ -152,7 +152,7 @@ class LoadDataSets:
         return self.nf  # number of files
 
 
-def load_wights(model_name=''):
+def load_wights(model_name=''):#初始化权重的字典  key权重文件名称：value该权重模型的路径
     current_dir_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     # current_file_path = os.path.abspath(__file__)
     # current_dir_path = os.path.dirname(current_file_path)  # src 目录

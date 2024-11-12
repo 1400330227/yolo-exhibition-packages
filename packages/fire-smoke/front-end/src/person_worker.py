@@ -8,7 +8,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from ultralytics import YOLO
 import os
 import utils.draw_boxes as Boxes
-import utils.statistics_classes as Statistics
+import utils.i18n as Statistics
 from person_detect import PersonDetect, letterbox
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

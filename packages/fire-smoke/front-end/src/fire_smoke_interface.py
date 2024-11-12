@@ -30,18 +30,20 @@ class FireSmokeInterface(ScrollArea):
 
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
-        font.setPointSize(14)
+        font.setPointSize(26)
         font.setBold(True)
 
         font_h4 = QtGui.QFont()
-        font_h4.setFamily("微软雅黑")
+        font_h4.setFamily("SimHei")
         font_h4.setPointSize(10)
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('火焰烟雾陷检测')
+        label1 = QLabel('火焰烟雾检测')
         label1.setFont(font)
+        hbox_video_labels.addStretch(4)
         hbox_video_labels.addWidget(label1)
+        hbox_video_labels.addStretch(6)
 
         self.layout.addLayout(hbox_video_labels)  # 添加标题
         vbox_weight = QVBoxLayout()

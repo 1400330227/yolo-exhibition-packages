@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QLabel, QPushButto
     QSizePolicy
 from qfluentwidgets import CardWidget, BodyLabel, DisplayLabel, TitleLabel, StrongBodyLabel, ComboBox, SubtitleLabel, \
     Slider, PrimaryPushButton, FluentIcon, CheckBox, SingleDirectionScrollArea, ScrollArea, PushButton, SimpleCardWidget
+from translate import Translator
+
 from datasets import load_wights
 from setting import names
 from utils.ui import removeAllWidgetFromLayout
@@ -30,18 +32,20 @@ class HelmetInterface(ScrollArea):
 
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
-        font.setPointSize(14)
+        font.setPointSize(26)
         font.setBold(True)
 
         font_h4 = QtGui.QFont()
-        font_h4.setFamily("微软雅黑")
+        font_h4.setFamily("SimHei")
         font_h4.setPointSize(10)
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
         label1 = QLabel('头盔检测')
         label1.setFont(font)
+        hbox_video_labels.addStretch(4)
         hbox_video_labels.addWidget(label1)
+        hbox_video_labels.addStretch(6)
 
         self.layout.addLayout(hbox_video_labels)  # 添加标题
         vbox_weight = QVBoxLayout()
@@ -321,12 +325,14 @@ class HelmetInterface(ScrollArea):
 
     @staticmethod
     def show_statistic(statistic_dic, label):
+        translator = Translator(from_lang="en", to_lang="zh")
         try:
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
-            label.addItems(results)
+            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]#i is tuple, i[0] is class,  i[1]is num
+            print(results)
+            label.addItems(results)#i[0]
 
         except Exception as e:
             print(repr(e))

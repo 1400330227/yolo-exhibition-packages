@@ -9,6 +9,8 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 import cv2
 from qfluentwidgets import FluentIcon, FluentWindow
 from qframelesswindow import FramelessWindow, StandardTitleBar
+from translate import Translator
+
 from worker import Worker
 
 from steel_plate_interface import SteelPlateInterface

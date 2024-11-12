@@ -40,6 +40,12 @@ class MainWindow(FluentWindow):
         self.init_navigation()
         self.init_window()
         self.init_listener()
+        self.init_model()
+
+    def init_model(self):
+        self.fireSmokeInterface.init_model('fire_smoke.pt')
+        self.worker.source = "datasets/fire_smoke.mp4"
+        self.worker.frame_show_1(self.worker.source)
 
     def init_navigation(self):
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰、烟雾陷检测')
@@ -91,7 +97,7 @@ class MainWindow(FluentWindow):
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, FireSmokeInterface):
             self.fireSmokeInterface.init_model('fire_smoke.pt')
-            self.worker.source = "datasets/fire_smoke.avi"
+            self.worker.source = "datasets/fire_smoke.mp4"
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, PersonInterface):
             self.personInterface.init_model('person.pt')

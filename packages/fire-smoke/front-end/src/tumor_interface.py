@@ -14,13 +14,13 @@ from utils.ui import removeAllWidgetFromLayout
 from i18n.zh_CN import i18n
 
 
-class PersonInterface(ScrollArea):
-    detect_target_label = '检测行人的数量，性别'
+class TumorInterface(ScrollArea):
+    detect_target_label = '检测脑部肿瘤是否存在'
 
     def __init__(self, text: str, parent=None, worker=None):
         super().__init__(parent=parent)
         # self.label = SubtitleLabel(text, self)
-        self.setObjectName('person_detect')
+        self.setObjectName('tumor_detect')
         self.worker = worker
         self.weight_paths = load_wights()
         self.all_classes = names
@@ -39,7 +39,7 @@ class PersonInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('行人检测')
+        label1 = QLabel(text) # 标题
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 
@@ -266,12 +266,14 @@ class PersonInterface(ScrollArea):
 
         self.init_widget()
         self.add_event_listener()
-        self.init_model('person.pt')
+        self.init_model('fire_smoke.pt')
+        self.worker.source = "datasets/fire_smoke.avi"
+        self.worker.frame_show_1(self.worker.source)
 
     def init_model(self, model_path):
         index = list(self.weight_paths.keys()).index(model_path)
         if index != -1:
-            self.comboBox.setCurrentIndex(index)
+            self.comboBox.setCurrentIndex(index)  # 2
             self.load_model(index, model_path)
 
     def add_event_listener(self):
@@ -324,8 +326,8 @@ class PersonInterface(ScrollArea):
         try:
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
-            # statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [str(i[1]) for i in statistic_dic]
+            statistic_dic = [i for i in statistic_dic if i[1] > 0]
+            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
             label.addItems(results)
 
         except Exception as e:
@@ -365,8 +367,10 @@ class PersonInterface(ScrollArea):
             return
         model_path = self.weight_paths[value]
         self.worker.set_model_path(model_path)
-        # self.all_classes = self.worker.get_classes()
-        self.all_classes = {0: "划线", 1: "性别"}
+        self.all_classes = self.worker.get_classes()
+        # print(self.all_classes)
+        # print(model_path, 'model_pathmodel_pathmodel_path')
+        # print(value, 'valuevaluevalue')
 
         self.checkbox_list = self.init_checkbox_list(self.all_classes, self.cardWidget2_vbox6)
         for i, checkbox in enumerate(self.checkbox_list):

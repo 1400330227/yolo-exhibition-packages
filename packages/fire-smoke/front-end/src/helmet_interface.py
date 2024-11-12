@@ -39,7 +39,7 @@ class HelmetInterface(ScrollArea):
         font_h4.setBold(False)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('头盔检测')
+        label1 = QLabel('安全帽检测')
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 

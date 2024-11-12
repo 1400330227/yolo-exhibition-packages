@@ -46,6 +46,7 @@ class MainWindow(FluentWindow):
         self.fireSmokeInterface.init_model('fire_smoke.pt')
         self.worker.source = "datasets/fire_smoke.mp4"
         self.worker.frame_show_1(self.worker.source)
+        self.worker.conf = 0.2
 
     def init_navigation(self):
         self.addSubInterface(self.fireSmokeInterface, FluentIcon.FLAG, '火焰、烟雾陷检测')

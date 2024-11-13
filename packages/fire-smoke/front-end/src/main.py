@@ -81,7 +81,7 @@ class MainWindow(FluentWindow):
 
         if isinstance(current_widget, FruitsInterface):
             self.fruitsInterface.init_model('fruits2.pt')
-            self.worker.source = "datasets/watermelon.mp4"
+            self.worker.source = "datasets/fruits2.mp4"
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, CarInterface):
             self.carInterface.init_model('car.pt')
@@ -105,7 +105,7 @@ class MainWindow(FluentWindow):
             self.worker1.frame_show_1(self.worker1.source)
         elif isinstance(current_widget, TumorInterface):
             self.tumorInterface.init_model('tumor.pt')
-            self.worker.source = "datasets/fire_smoke.avi"
+            self.worker.source = "datasets/tumor/tumor1.jpg"
             self.worker.frame_show_1(self.worker.source)
 
         # print(self.worker)

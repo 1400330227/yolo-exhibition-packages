@@ -201,11 +201,17 @@ class PersonDetect():
                     # print('jjjjjjjjjjjjjjjjjjjj', confs)
         return np.array(bbox_xywh), confs, clas, xy
 
-    def get_data(self, img, ori_img, pred, isline=False, issex=False):
+    def get_data(self, img, ori_img, pred, is_reset, isline=False, issex=False):
 
         """
         ori_img:原始图像
         """
+        if is_reset:
+            self.deepsort = DeepSort("./utils/deep_sort/deep/checkpoint/ckpt.t7",
+                                     max_dist=0.2, min_confidence=0.3,
+                                     nms_max_overlap=0.5, max_iou_distance=0.7,
+                                     max_age=70, n_init=3, nn_budget=100, use_cuda=True)
+
         self.idx_frame += 1
 
         # 将图像进行处理

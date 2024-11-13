@@ -150,9 +150,9 @@ class Worker(QThread):
                     # self.send_img.emit(frame if isinstance(frame, np.ndarray) else frame[0])
                     self.send_statistic.emit(classes)
                     # 休眠一段时间，以控制帧率
-                    if video_fps > fps:
-                        time.sleep(1 / fps - (end - start))
-                    if cv2.waitKey(1) & 0xFF == ord("q"):
+                    # if video_fps > fps:
+                    #     time.sleep(1 / fps - ((end - start - 0.01) if (end - start) > 0.01 else (end - start)))
+                    if cv2.waitKey(max(27 - int((end - start) * 1000), 1)) & 0xFF == ord("q"):
                         break
                 else:
                     print('结束了')

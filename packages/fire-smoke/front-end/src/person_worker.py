@@ -119,7 +119,7 @@ class PersonWorker(QThread):
             len_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
             video_frame = 0
             average_fps = 0.0
-
+            is_reset = False
             while cap.isOpened():
                 if self.jump_out:
                     break
@@ -127,6 +127,7 @@ class PersonWorker(QThread):
                 if video_frame == len_frames:
                     video_frame = 0
                     cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                    is_reset = True
 
                 success, frame = cap.read()
                 print('视频帧获取是否成功：{}'.format(success))
@@ -160,7 +161,8 @@ class PersonWorker(QThread):
                         if 1 in self.classes:
                             issex = True
                     # 将图像，识别结果传入处理函数，获取到画框后的图像以及统计信息
-                    img, classes = detector.get_data(img_tensor, frame, [pred], isline=isline, issex=issex)
+                    img, classes = detector.get_data(img_tensor, frame, [pred], is_reset, isline=isline, issex=issex)
+                    is_reset = False
 
                     end = time.time()
                     video_frame = video_frame + 1

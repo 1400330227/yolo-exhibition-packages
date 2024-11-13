@@ -34,9 +34,9 @@ class FruitsInterface(ScrollArea):
         font.setBold(True)
 
         font_h4 = QtGui.QFont()
-        font_h4.setFamily("SimHei")
-        font_h4.setPointSize(10)
-        font_h4.setBold(False)
+        font_h4.setFamily("微软雅黑")
+        font_h4.setPointSize(12)
+        font_h4.setBold(True)
 
         hbox_video_labels = QHBoxLayout(self)
         label1 = QLabel(text)

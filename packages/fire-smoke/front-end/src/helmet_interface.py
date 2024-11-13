@@ -8,8 +8,6 @@ from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QLabel, QPushButto
     QSizePolicy
 from qfluentwidgets import CardWidget, BodyLabel, DisplayLabel, TitleLabel, StrongBodyLabel, ComboBox, SubtitleLabel, \
     Slider, PrimaryPushButton, FluentIcon, CheckBox, SingleDirectionScrollArea, ScrollArea, PushButton, SimpleCardWidget
-from translate import Translator
-
 from datasets import load_wights
 from setting import names
 from utils.ui import removeAllWidgetFromLayout
@@ -36,12 +34,12 @@ class HelmetInterface(ScrollArea):
         font.setBold(True)
 
         font_h4 = QtGui.QFont()
-        font_h4.setFamily("SimHei")
-        font_h4.setPointSize(10)
-        font_h4.setBold(False)
+        font_h4.setFamily("微软雅黑")
+        font_h4.setPointSize(12)
+        font_h4.setBold(True)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('头盔检测')
+        label1 = QLabel('安全帽检测')
         label1.setFont(font)
         hbox_video_labels.addStretch(4)
         hbox_video_labels.addWidget(label1)
@@ -205,7 +203,7 @@ class HelmetInterface(ScrollArea):
 
         cardWidget1_hbox1.addStretch(1)
         label2 = BodyLabel(self.detect_target_label)
-        label2.setTextColor(QColor(156, 163, 175))
+        label2.setFont(font_h4)
         label2.setFixedHeight(20)
         cardWidget1_hbox1.addWidget(label2)
 
@@ -325,13 +323,11 @@ class HelmetInterface(ScrollArea):
 
     @staticmethod
     def show_statistic(statistic_dic, label):
-        translator = Translator(from_lang="en", to_lang="zh")
         try:
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
             results = [' ' + str(i18n(i[0])) + '：' + str(i[1]) for i in statistic_dic]#i is tuple, i[0] is class,  i[1]is num
-            print(results)
 
             label.addItems(results)#i[0]
 

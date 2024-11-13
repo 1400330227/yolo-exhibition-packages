@@ -201,20 +201,18 @@ class PersonDetect():
                     # print('jjjjjjjjjjjjjjjjjjjj', confs)
         return np.array(bbox_xywh), confs, clas, xy
 
-    def get_data(self, img, ori_img, pred, isline=False, issex=False):
+    def get_data(self, img, ori_img, pred, is_reset, isline=False, issex=False):
 
         """
         ori_img:原始图像
         """
+        if is_reset:
+            self.deepsort = DeepSort("./utils/deep_sort/deep/checkpoint/ckpt.t7",
+                                     max_dist=0.2, min_confidence=0.3,
+                                     nms_max_overlap=0.5, max_iou_distance=0.7,
+                                     max_age=70, n_init=3, nn_budget=100, use_cuda=True)
+
         self.idx_frame += 1
-        # img = letterbox(ori_img)[0]
-        # # Convert
-        # img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
-        # img = np.ascontiguousarray(img)
-        # img_tensor = torch.from_numpy(img).to(torch.device('cuda'))
-        # img_tensor /= 255.0
-        # if img_tensor.ndimension() == 3:
-        #     img_tensor = img_tensor.unsqueeze(0)
 
         # 将图像进行处理
         bbox_xywh, cls_conf, cls_ids, xy = self.detect_person(img, ori_img, pred)
@@ -239,10 +237,12 @@ class PersonDetect():
 
             if track_id not in self.paths:
                 self.paths[track_id] = deque(maxlen=2)
-                self.total_track = track_id
+                # self.total_track = track_id
+                self.total_track += 1
             self.paths[track_id].append(midpoint)
             previous_midpoint = self.paths[track_id][0]
             origin_previous_midpoint = (previous_midpoint[0], ori_img.shape[0] - previous_midpoint[1])
+
             if line is not None and intersect(midpoint, previous_midpoint, line[0],
                                               line[1]) and track_id not in self.already_counted:
                 self.class_counter[self.track_cls] += 1
@@ -286,24 +286,12 @@ class PersonDetect():
         # 参数 total_counter up_count down_count
         line_num_label = "穿过黄线人数: {} ({} 向上, {} 向下)".format(str(self.total_counter), str(self.up_count),
                                                                       str(self.down_count))
-        # t_size = get_size_with_pil(label, 25)
-        # x1 = 20
-        # y1 = 100
-        # # color = compute_color_for_labels(2)
-        # color = (0, 255, 255)
-        # cv2.rectangle(ori_img, (x1 - 1, y1), (x1 + t_size[0] + 10, y1 - t_size[1]), color, 2)
-        # ori_img = put_text_to_cv2_img_with_pil(ori_img, label, (x1 + 5, y1 - t_size[1] - 2), (0, 0, 0))
+
         line_cross_label = ""
         if self.last_track_id >= 0:  # 参数 -- last_track_id
             line_cross_label = "最新: 行人{}号{}穿过黄线".format(str(self.last_track_id),
                                                                  str("向上") if self.angle >= 0 else str('向下'))
-            # t_size = get_size_with_pil(line_cross_label, 25)
-            # x1 = 20
-            # y1 = 150
-            # # color = compute_color_for_labels(2)
-            # color = (0, 255, 255)
-            # cv2.rectangle(ori_img, (x1 - 1, y1), (x1 + t_size[0] + 10, y1 - t_size[1]), color, 2)
-            # ori_img = put_text_to_cv2_img_with_pil(ori_img, line_cross_label, (x1 + 5, y1 - t_size[1] - 2), (255, 0, 0))
+
         if isline:
             info = {
                 "total": total_label,

@@ -40,6 +40,7 @@ class PersonInterface(ScrollArea):
 
         hbox_video_labels = QHBoxLayout(self)
         label1 = QLabel('行人检测')
+        label1.setStyleSheet('color: red;')
         label1.setFont(font)
         hbox_video_labels.addStretch(4)
         hbox_video_labels.addWidget(label1)
@@ -235,14 +236,14 @@ class PersonInterface(ScrollArea):
         cardWidget3_vbox.setAlignment(Qt.AlignTop)
 
         result_details_label = QLabel()
-        result_details_label.setText('详细信息')
+        result_details_label.setText('检测结果')
         result_details_label.setFixedHeight(20)
         result_details_label.setFont(font_h4)
         cardWidget3_vbox.addWidget(result_details_label)
 
         self.resultWidget = QListWidget(cardWidget3)
         self.resultWidget.setStyleSheet(
-            "QListWidget{background-color: rgba(12, 28, 77, 0);border-radius:0px;font-size: 16px;}")
+            "QListWidget{color: rgb(255, 0, 0);border-radius:0px;font-size: 16px;}")
         cardWidget3_vbox.addWidget(self.resultWidget)
         # 添加退出按钮
         # self.exit_button = QPushButton("❌退出")
@@ -334,7 +335,7 @@ class PersonInterface(ScrollArea):
             print(repr(e))
 
     def init_widget(self):
-        self.layout.setContentsMargins(20, 18, 20, 20)
+        self.layout.setContentsMargins(20, 0, 20, 20)
         self.setStyleSheet("QScrollArea{background: transparent; border: none}")
 
     def change_val(self, value, flag):

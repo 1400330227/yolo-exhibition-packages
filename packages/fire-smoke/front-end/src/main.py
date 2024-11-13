@@ -9,7 +9,6 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 import cv2
 from qfluentwidgets import FluentIcon, FluentWindow
 from qframelesswindow import FramelessWindow, StandardTitleBar
-from translate import Translator
 
 from worker import Worker
 
@@ -76,6 +75,21 @@ class MainWindow(FluentWindow):
         # 这行代码必须在 setExpandWidth() 后面调用
         self.navigationInterface.setCollapsible(False)
 
+        #  增加图片显示
+        pixmap = QPixmap("datasets/qrcode.jpg")
+        # 创建一个 QLabel 用于显示图片
+        scaled_pixmap = pixmap.scaled(250, 250, Qt.KeepAspectRatio)
+        label = QLabel(self)
+        label.setPixmap(scaled_pixmap)
+        # 设置 QLabel 的大小和位置（固定）
+        label.setGeometry(5, 600, scaled_pixmap.width(), scaled_pixmap.height())
+        # 将 QLabel 添加到布局中
+        label.setParent(self)
+        text_label = QLabel(self)
+        text_label.setText("蒙祖强教授团队研发\n联系方式如下：\n15977760882")
+        text_label.setStyleSheet("font-size:22px")
+        text_label.setGeometry(20, 510, 200, 90)
+
     def handler_switch_to(self, current_widget):
         self.worker.jump_out = True
         self.worker.send_img.emit(np.array([]))  # 检测结果图像
@@ -96,7 +110,7 @@ class MainWindow(FluentWindow):
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, SteelPlateInterface):
             self.steelPlateInterface.init_model('steelplate.pt')
-            self.worker.source = "datasets/person.mp4"
+            self.worker.source = "datasets/steel_plate.jpg"
             self.worker.frame_show_1(self.worker.source)
         elif isinstance(current_widget, FireSmokeInterface):
             self.fireSmokeInterface.init_model('fire_smoke.pt')
@@ -108,7 +122,7 @@ class MainWindow(FluentWindow):
             self.worker1.frame_show_1(self.worker1.source)
         elif isinstance(current_widget, TumorInterface):
             self.tumorInterface.init_model('tumor.pt')
-            self.worker.source = "datasets/tumor/tumor1.jpg"
+            self.worker.source = "datasets/tumor.mp4"
             self.worker.frame_show_1(self.worker.source)
 
         # print(self.worker)

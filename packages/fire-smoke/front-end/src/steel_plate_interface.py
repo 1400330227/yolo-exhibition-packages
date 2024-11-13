@@ -40,6 +40,7 @@ class SteelPlateInterface(ScrollArea):
 
         hbox_video_labels = QHBoxLayout(self)
         label1 = QLabel('钢板表面缺陷检测')
+        label1.setStyleSheet('color: red;')
         label1.setFont(font)
         hbox_video_labels.addStretch(4)
         hbox_video_labels.addWidget(label1)
@@ -235,14 +236,14 @@ class SteelPlateInterface(ScrollArea):
         cardWidget3_vbox.setAlignment(Qt.AlignTop)
 
         result_details_label = QLabel()
-        result_details_label.setText('详细信息')
+        result_details_label.setText('检测结果')
         result_details_label.setFixedHeight(20)
         result_details_label.setFont(font_h4)
         cardWidget3_vbox.addWidget(result_details_label)
 
         self.resultWidget = QListWidget(cardWidget3)
         self.resultWidget.setStyleSheet(
-            "QListWidget{background-color: rgba(12, 28, 77, 0);border-radius:0px;font-size: 16px;}")
+            "QListWidget{color: rgb(255, 0, 0);border-radius:0px;font-size: 16px;}")
         cardWidget3_vbox.addWidget(self.resultWidget)
         # 添加退出按钮
         # self.exit_button = QPushButton("❌退出")
@@ -329,14 +330,14 @@ class SteelPlateInterface(ScrollArea):
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [' ' + str(i18n(i[0])) + '：' + str(i[1]) for i in statistic_dic]
+            results = ['当前画面' + str(i18n(i[0])) + '数量：' + str(i[1]) for i in statistic_dic]
             label.addItems(results)
 
         except Exception as e:
             print(repr(e))
 
     def init_widget(self):
-        self.layout.setContentsMargins(20, 18, 20, 20)
+        self.layout.setContentsMargins(20, 0, 20, 20)
         self.setStyleSheet("QScrollArea{background: transparent; border: none}")
 
     def change_val(self, value, flag):
@@ -371,7 +372,7 @@ class SteelPlateInterface(ScrollArea):
         model_path = self.weight_paths[value]
         self.worker.set_model_path(model_path)
         self.all_classes = self.worker.get_classes()
-
+        print(self.all_classes)
         self.checkbox_list = self.init_checkbox_list(self.all_classes, self.cardWidget2_vbox6)
         for i, checkbox in enumerate(self.checkbox_list):
             checkbox.stateChanged.connect(lambda: self.change_checkbox_state(self.checkbox_list))

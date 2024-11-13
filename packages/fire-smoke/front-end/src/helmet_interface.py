@@ -330,8 +330,9 @@ class HelmetInterface(ScrollArea):
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]#i is tuple, i[0] is class,  i[1]is num
+            results = [' ' + str(i18n(i[0])) + '：' + str(i[1]) for i in statistic_dic]#i is tuple, i[0] is class,  i[1]is num
             print(results)
+
             label.addItems(results)#i[0]
 
         except Exception as e:

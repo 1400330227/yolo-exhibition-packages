@@ -5,7 +5,6 @@ import numpy as np
 import torch
 from PyQt5.QtCore import QThread, pyqtSignal, Qt
 from PyQt5.QtGui import QPixmap, QImage
-from translate import Translator
 from ultralytics import YOLO
 import os
 import utils.draw_boxes as Boxes
@@ -27,7 +26,6 @@ class Worker(QThread):
 
     send_msg = pyqtSignal(str)  # 日志
     send_fps = pyqtSignal(str)  # 帧率
-    translator = Translator(from_lang="en", to_lang="zh")
 
     def __init__(self):
         super(Worker, self).__init__()

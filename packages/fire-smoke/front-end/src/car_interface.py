@@ -327,7 +327,7 @@ class CarInterface(ScrollArea):
             label.clear()
             statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True)
             statistic_dic = [i for i in statistic_dic if i[1] > 0]
-            results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic]
+            results = [' ' + str(i18n(i[0])) + '：' + str(i[1]) for i in statistic_dic]
             label.addItems(results)
 
         except Exception as e:

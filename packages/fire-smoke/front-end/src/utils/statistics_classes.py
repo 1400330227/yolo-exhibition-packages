@@ -4,6 +4,6 @@ def statistics_classes(results, names):
     for result in results:
         for box in result.boxes:
             cls = names[box.cls.item()]
-            print(i18n(cls))
+            print(i18n(cls), "++++++++++++ ")
             classes[cls] += 1
     return classes

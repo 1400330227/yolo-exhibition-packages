@@ -35,11 +35,11 @@ class FireSmokeInterface(ScrollArea):
 
         font_h4 = QtGui.QFont()
         font_h4.setFamily("微软雅黑")
-        font_h4.setPointSize(10)
-        font_h4.setBold(False)
+        font_h4.setPointSize(12)
+        font_h4.setBold(True)
 
         hbox_video_labels = QHBoxLayout(self)
-        label1 = QLabel('火焰烟雾陷检测')
+        label1 = QLabel('火焰烟雾检测')
         label1.setFont(font)
         hbox_video_labels.addWidget(label1)
 
@@ -149,7 +149,7 @@ class FireSmokeInterface(ScrollArea):
         confidence_threshold_label.setFont(font_h4)
         cardWidget2_hbox1.addWidget(confidence_threshold_label)
         cardWidget2_hbox1.addStretch(1)
-        self.confidence_threshold_value_label = SubtitleLabel('30%')
+        self.confidence_threshold_value_label = SubtitleLabel('20%')
         cardWidget2_hbox1.addWidget(self.confidence_threshold_value_label)
 
         slider1_value_min = QLabel('0%')
@@ -158,7 +158,7 @@ class FireSmokeInterface(ScrollArea):
 
         # 设置取值范围和当前值
         self.slider1.setRange(0, 100)
-        self.slider1.setValue(30)
+        self.slider1.setValue(20)
         self.slider1.valueChanged.connect(lambda x: self.change_val(x, 'conf'))
         cardWidget2_hbox2.addWidget(slider1_value_min)
         cardWidget2_hbox2.addWidget(self.slider1)
@@ -201,7 +201,7 @@ class FireSmokeInterface(ScrollArea):
 
         cardWidget1_hbox1.addStretch(1)
         label2 = BodyLabel(self.detect_target_label)
-        label2.setTextColor(QColor(156, 163, 175))
+        label2.setFont(font_h4)
         label2.setFixedHeight(20)
         cardWidget1_hbox1.addWidget(label2)
 

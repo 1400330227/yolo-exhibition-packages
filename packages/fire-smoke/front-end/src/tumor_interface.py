@@ -35,8 +35,8 @@ class TumorInterface(ScrollArea):
 
         font_h4 = QtGui.QFont()
         font_h4.setFamily("微软雅黑")
-        font_h4.setPointSize(10)
-        font_h4.setBold(False)
+        font_h4.setPointSize(12)
+        font_h4.setBold(True)
 
         hbox_video_labels = QHBoxLayout(self)
         label1 = QLabel(text) # 标题
@@ -201,7 +201,7 @@ class TumorInterface(ScrollArea):
 
         cardWidget1_hbox1.addStretch(1)
         label2 = BodyLabel(self.detect_target_label)
-        label2.setTextColor(QColor(156, 163, 175))
+        label2.setFont(font_h4)
         label2.setFixedHeight(20)
         cardWidget1_hbox1.addWidget(label2)
 
